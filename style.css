@@ -1,0 +1,106 @@
+@font-face {
+    font-family: "DigiRat-Calc-Font";
+    src: url(fonts/Technology-Bold.ttf);
+}
+
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+#calc-container {
+    background-color: black;
+    height: 400px;
+    width: 300px;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+#screen {
+    display: flex;
+    background-color: grey;
+    margin: 10px;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#output {
+    font-family: DigiRat-Calc-Font, Arial, Helvetica, sans-serif;
+    font-size: 50px;
+    margin: 0 8px;
+}
+
+#keypad-container {
+    display: flex;
+    flex-direction: row;
+    background-color: bisque;
+    flex: 3;
+    padding: 4px;
+    margin: 0px 10px 10px 10px;
+}
+
+#left-container {
+    display: flex;
+    flex-direction: column;
+    flex: 3;
+}
+
+#right-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    padding: 0px 0px 0px 0px;
+}
+
+#top-container {
+    display: flex;
+    flex: 1;
+    gap: 0px;
+    padding: 0px 0px 0px 0px;
+}
+
+
+#numpad-container {
+    flex: 4;
+    display: flex;
+    flex-wrap: wrap;
+ 
+}
+
+
+
+
+
+.operator {
+    
+}
+
+.top-operator {
+    flex: 1 0 33%
+}
+
+.right-operator {
+    flex: 1 0 20%;
+}
+
+.num-btn {
+    flex: 1 0 33%;
+}
+
+
+#zero {
+    flex: 0 0 66.67%;
+}
+
+#division {
+    
+}
+
+#percent {
+    
+}
+
