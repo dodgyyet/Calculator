@@ -26,9 +26,23 @@ function operate(num1,operator,num2) {
             return divide(num1,num2);   
         case "=":
             return(num2)
+        case "%":
+            return num2/100
         default:
-            return "Unknown symbol";
+            return "Unknown Symbol";
     };
+};
+
+function modify(num, modifier) {
+    switch (modifier) {
+        case "%":
+            return toPercent(num);
+        case "+/-":
+            return switchSigns(num)
+        default:
+            return "Unknown Symbol";
+    };   
+
 };
 
 /* Key Press Options:
@@ -70,22 +84,29 @@ keypad.addEventListener("click", (event) => {
             output.textContent = displayVal1;
         }
         else {
-            if (displayVal1 === "0") {
+            if (displayVal2 === "0") {
                 displayVal2 = target.textContent;
             }
             else {
                 displayVal2 += target.textContent;
             }
-            console.log(displayVal2+" number 2")
+            console.log("displayVal1: "+displayVal1)
+            console.log("displayVal2: "+displayVal2)
             output.textContent = displayVal2;
         };
 
     }
-
+    //else if target.classList.contains("modifier") {
+        //if (operator) {
+            //displayVal2
+        //}
+    //}
     else if (target.classList.contains("operator")) {
         if(operator) {
+            console.log(`${displayVal1} ${operator} ${output.textContent}`)
             output.textContent=operate(displayVal1,operator,output.textContent)
-            displayVal1 = ""
+            displayVal1 = output.textContent
+            displayVal2 = ""
         }
         operator = target.textContent;
     }
