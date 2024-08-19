@@ -1,9 +1,9 @@
 function add(num1,num2) {
-    return parseInt(num1)+parseInt(num2);
+    return parseInt(num1)+parseFloat(num2);
 };
 
 function subtract(num1,num2) {
-    return parseInt(num1)-parseInt(num2);
+    return parseInt(num1)-parseFloat(num2);
 };
 
 function multiply(num1,num2) {
@@ -26,19 +26,41 @@ function operate(num1,operator,num2) {
             return divide(num1,num2);   
         case "=":
             return(num2)
-        case "%":
-            return num2/100
         default:
             return "Unknown Symbol";
     };
 };
 
-function modify(num, modifier) {
+function toPercent(num) {
+    return num/100
+};
+
+function switchSigns(num) {
+    console.log(`switchSings(${num})`)
+    if (!num) {
+        return "-0";
+    }
+    else if (String(num).charAt(0) === "-") {
+        return String(num).slice(1);
+    }
+    else {
+        return `-${num}`;
+    };
+}
+
+//
+function modify(num1, modifier, num2) {
     switch (modifier) {
         case "%":
-            return toPercent(num);
+            if(num2) {
+                return toPercent(num2)
+            }
+            return toPercent(num1);
         case "+/-":
-            return switchSigns(num)
+            if (num2) {
+                return toPercent(num2)
+            }
+            return switchSigns(num1)
         default:
             return "Unknown Symbol";
     };   
@@ -65,6 +87,7 @@ const keypad = document.querySelector("#keypad-container");
 let displayVal1 = "";
 let displayVal2 = "";
 let operator = "";
+let modifier = "";
 const output = document.querySelector("#output")
 keypad.addEventListener("click", (event) => {
     const target=event.target;
@@ -90,23 +113,30 @@ keypad.addEventListener("click", (event) => {
             else {
                 displayVal2 += target.textContent;
             }
-            console.log("displayVal1: "+displayVal1)
-            console.log("displayVal2: "+displayVal2)
+            console.log("displayVal1: "+displayVal1);
+            console.log("displayVal2: "+displayVal2);
             output.textContent = displayVal2;
         };
 
     }
-    //else if target.classList.contains("modifier") {
-        //if (operator) {
-            //displayVal2
-        //}
-    //}
+    else if (target.classList.contains("modifier")) {
+        modifier = target.textContent;
+        if (operator) {
+            displayVal2 = modify(displayVal1,modifier,displayVal2);
+            output.textContent = displayVal2
+        }
+        else {
+            displayVal1 = modify(displayVal1,modifier,displayVal2)
+            console.log(displayVal1)
+            output.textContent = displayVal1
+        }
+    }
     else if (target.classList.contains("operator")) {
         if(operator) {
-            console.log(`${displayVal1} ${operator} ${output.textContent}`)
-            output.textContent=operate(displayVal1,operator,output.textContent)
-            displayVal1 = output.textContent
-            displayVal2 = ""
+            console.log(`${displayVal1} ${operator} ${output.textContent}`);
+            output.textContent=operate(displayVal1,operator,output.textContent);
+            displayVal1 = output.textContent;
+            displayVal2 = "";
         }
         operator = target.textContent;
     }
