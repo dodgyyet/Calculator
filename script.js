@@ -48,7 +48,7 @@ function switchSigns(num) {
     };
 }
 
-//
+//If there is a num2 it will get the number from that if not then num1. 
 function modify(num1, modifier, num2) {
     switch (modifier) {
         case "%":
@@ -119,6 +119,8 @@ keypad.addEventListener("click", (event) => {
         };
 
     }
+    //It returns to either num1 or num2 depending on the if there is an operator or not
+    //If a 5 then + is entered then % it will make num2 .05 and when equaled be 5.05
     else if (target.classList.contains("modifier")) {
         modifier = target.textContent;
         if (operator) {
@@ -131,6 +133,8 @@ keypad.addEventListener("click", (event) => {
             output.textContent = displayVal1
         }
     }
+    //If there is already an operator it does that operation first before adding the new one
+    //So if 5 + 5 + is entered it will become 10 + as 10 becomes displayVal1
     else if (target.classList.contains("operator")) {
         if(operator) {
             console.log(`${displayVal1} ${operator} ${output.textContent}`);
