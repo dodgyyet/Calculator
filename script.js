@@ -14,7 +14,10 @@ function divide(num1,num2) {
     return num1/num2;
 };
 
-function operate(num1,operator,num2) {
+function operate(num1,newOperator,operator,num2) {
+    //if (newOperator === "=") {
+        //return 
+    //}
     switch (operator) {
         case "+":
             return add(num1,num2);
@@ -25,7 +28,13 @@ function operate(num1,operator,num2) {
         case "÷":    
             return divide(num1,num2);   
         case "=":
-            return(num2)
+            if (num2) {
+                return num2
+            }
+            else {
+                return num1
+            }
+            
         default:
             return "Unknown Symbol";
     };
@@ -49,6 +58,7 @@ function switchSigns(num) {
 }
 
 //If there is a num2 it will get the number from that if not then num1. 
+// Returns to either displayVal1 or displayVal2 depending on if there is an operator
 function modify(num1, modifier, num2) {
     switch (modifier) {
         case "%":
@@ -96,19 +106,29 @@ keypad.addEventListener("click", (event) => {
         output.textContent = "0";
         return
     }
+    
     if (target.classList.contains("num-btn")) {
         if (!operator) {
-            if (displayVal1 === "0") {
+            // 0 is replaced with the new number
+            if (displayVal1 === 0) {
                 displayVal1 = target.textContent;
             }
+            // If -0 replaces the 0 but keeps the -
+            else if (displayVal1 === "-0") {
+                displayVal1 = `-${target.textContent}`
+            }
+            // Else it just adds the new number
             else {
                 displayVal1 += target.textContent;
             }
             output.textContent = displayVal1;
         }
         else {
-            if (displayVal2 === "0") {
+            if (displayVal2 === 0) {
                 displayVal2 = target.textContent;
+            }
+            else if (displayVal1 === "-0") {
+                displayVal1 = `-${target.textContent}`
             }
             else {
                 displayVal2 += target.textContent;
@@ -136,11 +156,12 @@ keypad.addEventListener("click", (event) => {
     //If there is already an operator it does that operation first before adding the new one
     //So if 5 + 5 + is entered it will become 10 + as 10 becomes displayVal1
     else if (target.classList.contains("operator")) {
+        //5 + 5 = 
         if(operator) {
             console.log(`${displayVal1} ${operator} ${output.textContent}`);
-            output.textContent=operate(displayVal1,operator,output.textContent);
+            output.textContent=operate(displayVal1,output.textContent,operator,displayVal2);
             displayVal1 = output.textContent;
-            displayVal2 = "";
+            displayVal2 = 0;
         }
         operator = target.textContent;
     }
