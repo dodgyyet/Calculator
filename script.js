@@ -59,7 +59,7 @@ function switchSigns(num) {
 
 //If there is a num2 it will get the number from that if not then num1. 
 // Returns to either displayVal1 or displayVal2 depending on if there is an operator
-function modify(num1, modifier, num2) {
+function modify(num1, modifier, num2, isOperator) {
     switch (modifier) {
         case "%":
             if(num2) {
@@ -68,7 +68,10 @@ function modify(num1, modifier, num2) {
             return toPercent(num1);
         case "+/-":
             if (num2) {
-                return toPercent(num2)
+                return switchSigns(num2)
+            }
+            else if (isOperator) {
+                return switchSigns(0)
             }
             return switchSigns(num1)
         default:
@@ -127,8 +130,8 @@ keypad.addEventListener("click", (event) => {
             if (displayVal2 === 0) {
                 displayVal2 = target.textContent;
             }
-            else if (displayVal1 === "-0") {
-                displayVal1 = `-${target.textContent}`
+            else if (displayVal2 === "-0") {
+                displayVal2 = `-${target.textContent}`
             }
             else {
                 displayVal2 += target.textContent;
@@ -144,11 +147,11 @@ keypad.addEventListener("click", (event) => {
     else if (target.classList.contains("modifier")) {
         modifier = target.textContent;
         if (operator) {
-            displayVal2 = modify(displayVal1,modifier,displayVal2);
+            displayVal2 = modify(displayVal1,modifier,displayVal2,true);
             output.textContent = displayVal2
         }
         else {
-            displayVal1 = modify(displayVal1,modifier,displayVal2)
+            displayVal1 = modify(displayVal1,modifier,displayVal2,false)
             console.log(displayVal1)
             output.textContent = displayVal1
         }

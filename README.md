@@ -10,10 +10,6 @@ like 5 + 5 + = 10 + but
 5 + 5 = = should equal 15
 5 + 5 + = should equal 20
 
-Make it so +/- after an operator
-returns -0 but % after an operator
-returns % of num1
-
 Make it so if you keep hitting equals it will keep operating with the same second number to the total
 
 Make it so you can only have 1 decimal
