@@ -45,6 +45,7 @@ function toPercent(num) {
 };
 
 function switchSigns(num) {
+
     console.log(`switchSings(${num})`)
     if (!num) {
         return "-0";
@@ -67,13 +68,15 @@ function modify(num1, modifier, num2, isOperator) {
             }
             return toPercent(num1);
         case "+/-":
-            if (num2) {
+            // If there is no operator (just 1 number) it returns the negative of num1
+            // If there is an operator it returns negative of num2 which if num2 is null returns -0
+            
+            if (!isOperator) {
+                return switchSigns(num1)
+            }
+            else {
                 return switchSigns(num2)
             }
-            else if (isOperator) {
-                return switchSigns(0)
-            }
-            return switchSigns(num1)
         default:
             return "Unknown Symbol";
     };   
@@ -113,7 +116,10 @@ keypad.addEventListener("click", (event) => {
     if (target.classList.contains("num-btn")) {
         if (!operator) {
             // 0 is replaced with the new number
-            if (displayVal1 === 0) {
+            console.log(typeof(displayVal1))
+            //Soft equality for converstion if not the input of 
+            // 0 then 5 will result in 05 instead of 5
+            if (displayVal1 == 0) {
                 displayVal1 = target.textContent;
             }
             // If -0 replaces the 0 but keeps the -
@@ -127,7 +133,9 @@ keypad.addEventListener("click", (event) => {
             output.textContent = displayVal1;
         }
         else {
-            if (displayVal2 === 0) {
+            console.log(typeof(displayVal2) === typeof(displayVal2))
+
+            if (displayVal2 == 0) {
                 displayVal2 = target.textContent;
             }
             else if (displayVal2 === "-0") {
