@@ -117,25 +117,29 @@ keypad.addEventListener("click", (event) => {
         if (!operator) {
             // 0 is replaced with the new number
             console.log(typeof(displayVal1))
-            //Soft equality for converstion if not the input of 
-            // 0 then 5 will result in 05 instead of 5
-            if (displayVal1 == 0) {
+            //Uses String() to ensure it is equal to the string 0 even if the 0 was changed in some way
+            //It must be tested equality to a string so -0 doesn't show up as equal
+            if (String(displayVal1) === "0") {
                 displayVal1 = target.textContent;
             }
+            
             // If -0 replaces the 0 but keeps the -
             else if (displayVal1 === "-0") {
+                console.log("-0 ===")
                 displayVal1 = `-${target.textContent}`
+                console.log(displayVal1+" -0")
             }
             // Else it just adds the new number
             else {
                 displayVal1 += target.textContent;
             }
+            console.log(displayVal1);
             output.textContent = displayVal1;
         }
         else {
             console.log(typeof(displayVal2) === typeof(displayVal2))
 
-            if (displayVal2 == 0) {
+            if (String(displayVal2) === "0") {
                 displayVal2 = target.textContent;
             }
             else if (displayVal2 === "-0") {
