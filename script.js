@@ -1,9 +1,9 @@
 function add(num1,num2) {
-    return parseInt(num1)+parseFloat(num2);
+    return parseFloat(num1)+parseFloat(num2);
 };
 
 function subtract(num1,num2) {
-    return parseInt(num1)-parseFloat(num2);
+    return parseFloat(num1)-parseFloat(num2);
 };
 
 function multiply(num1,num2) {
@@ -28,13 +28,7 @@ function operate(num1,newOperator,operator,num2) {
         case "÷":    
             return divide(num1,num2);   
         case "=":
-            if (num2) {
-                return num2
-            }
-            else {
-                return num1
-            }
-            
+            return num1
         default:
             return "Unknown Symbol";
     };
@@ -100,15 +94,15 @@ If = is hit it performs the operation if there is one and stores the result as d
 There are two numbers stored divided by the operator (+, -, /, *)
 */
 const keypad = document.querySelector("#keypad-container");
-let displayVal1 = "";
-let displayVal2 = "";
+let displayVal1 = "0";
+let displayVal2 = "0";
 let operator = "";
 let modifier = "";
 const output = document.querySelector("#output")
 keypad.addEventListener("click", (event) => {
     const target=event.target;
     if (target.id === "AC") {
-        [displayVal1,displayVal2,operator] = ["","",""]
+        [displayVal1,displayVal2,operator] = ["0","0",""]
         output.textContent = "0";
         return
     }
@@ -119,6 +113,13 @@ keypad.addEventListener("click", (event) => {
             console.log(typeof(displayVal1))
             //Uses String() to ensure it is equal to the string 0 even if the 0 was changed in some way
             //It must be tested equality to a string so -0 doesn't show up as equal
+            if (target.textContent === ".") {
+                if (!displayVal1.includes(".")) {
+                    displayVal1 += "."
+                    output.textContent = displayVal1
+                }
+                return
+            }
             if (String(displayVal1) === "0") {
                 displayVal1 = target.textContent;
             }
@@ -137,8 +138,13 @@ keypad.addEventListener("click", (event) => {
             output.textContent = displayVal1;
         }
         else {
-            console.log(typeof(displayVal2) === typeof(displayVal2))
-
+            if (target.textContent === ".") {
+                if (!displayVal2.includes(".")) {
+                    displayVal2 += "."
+                    output.textContent = displayVal2
+                }
+                return
+            }
             if (String(displayVal2) === "0") {
                 displayVal2 = target.textContent;
             }
@@ -176,7 +182,7 @@ keypad.addEventListener("click", (event) => {
             console.log(`${displayVal1} ${operator} ${output.textContent}`);
             output.textContent=operate(displayVal1,output.textContent,operator,displayVal2);
             displayVal1 = output.textContent;
-            displayVal2 = 0;
+            displayVal2 = "0";
         }
         operator = target.textContent;
     }
