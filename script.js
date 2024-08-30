@@ -14,10 +14,10 @@ function divide(num1,num2) {
     return num1/num2;
 };
 
-function operate(num1,newOperator,operator,num2) {
-    //if (newOperator === "=") {
-        //return 
-    //}
+function operate(num1,operator,num2) {
+    if(!num2) {
+        return num1
+    }
     switch (operator) {
         case "+":
             return add(num1,num2);
@@ -26,9 +26,7 @@ function operate(num1,newOperator,operator,num2) {
         case "x":
             return multiply(num1,num2);   
         case "÷":    
-            return divide(num1,num2);   
-        case "=":
-            return num1
+            return divide(num1,num2);       
         default:
             return "Unknown Symbol";
     };
@@ -98,11 +96,13 @@ let displayVal1 = "0";
 let displayVal2 = "0";
 let operator = "";
 let modifier = "";
+let prevOperator = "";
+let result = "";
 const output = document.querySelector("#output")
 keypad.addEventListener("click", (event) => {
     const target=event.target;
     if (target.id === "AC") {
-        [displayVal1,displayVal2,operator] = ["0","0",""]
+        [displayVal1,displayVal2,operator,result] = ["0",false,"",false]
         output.textContent = "0";
         return
     }
@@ -165,26 +165,51 @@ keypad.addEventListener("click", (event) => {
     else if (target.classList.contains("modifier")) {
         modifier = target.textContent;
         if (operator) {
-            displayVal2 = modify(displayVal1,modifier,displayVal2,true);
-            output.textContent = displayVal2
+            result = modify(displayVal1,modifier,displayVal2,true);
+            output.textContent = result
         }
         else {
-            displayVal1 = modify(displayVal1,modifier,displayVal2,false)
+            result = modify(displayVal1,modifier,displayVal2,false)
             console.log(displayVal1)
-            output.textContent = displayVal1
+            output.textContent = result
         }
     }
     //If there is already an operator it does that operation first before adding the new one
     //So if 5 + 5 + is entered it will become 10 + as 10 becomes displayVal1
-    else if (target.classList.contains("operator")) {
-        //5 + 5 = 
+    else if (target.classList.contains("operator")) {     
         if(operator) {
-            console.log(`${displayVal1} ${operator} ${output.textContent}`);
-            output.textContent=operate(displayVal1,output.textContent,operator,displayVal2);
+            if (displayVal2) {
+                output.textContent=operate(displayVal1,operator,displayVal2);
+                console.log(`${displayVal1} ${operator} ${output.textContent}`);
+            }
+            else {
+                output.textContent=operate(displayVal1,operator,result);
+            }
+            
+            result = output.textContent;
+        }
+        prevOperator = operator
+        operator = target.textContent;
+    }
+    else if (target.id === "=") {
+        console.log(operator)
+        if (operator) {
+            console.log(operator)
+            if (displayVal2) {
+                console.log(displayVal2)
+                output.textContent=operate(displayVal1,operator,displayVal2);
+                console.log(output.textContent)
+            }
+            else {
+                console.log(`${displayVal1} ${operator} ${displayVal1}`)
+                output.textContent=operate(displayVal1,operator,displayVal1);
+            }
             displayVal1 = output.textContent;
             displayVal2 = "0";
         }
-        operator = target.textContent;
+        else {
+            
+        }
     }
     else {
         return;

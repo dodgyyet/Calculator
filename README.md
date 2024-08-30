@@ -4,7 +4,7 @@ calc
 The current issue is that
 operations can do lots of differett things depending
 on the circumstance
-like 5 + 5 + = 10 + but
+like 5 + 5 + equals 10 + but
 5 + + should equal 5 + but
 5 + = should equal 10
 5 + 5 = = should equal 15
