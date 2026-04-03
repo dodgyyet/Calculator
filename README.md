@@ -1,14 +1,18 @@
 # Calculator
-calc
 
-The current issue is that
-operations can do lots of differett things depending
-on the circumstance
-like 5 + 5 + equals 10 + but
-5 + + should equal 5 + but
-5 + = should equal 10
-5 + 5 = = should equal 15
-5 + 5 + = should equal 20
+A small browser calculator built with vanilla HTML, CSS, and JavaScript.
 
-Make it so if you keep hitting equals it will keep operating with the same second number to the total
+## Features
+- Number input with decimal support
+- Basic operations: `+`, `-`, `x`, `÷`
+- `AC`, sign toggle (`+/-`), and percent (`%`)
+- Chained operations (example: `5 + 5 +` -> `10 +`)
+- Repeat equals behavior (example: `5 + 5 = =` -> `15`)
 
+## Stack
+- HTML
+- CSS
+- JavaScript
+
+## Run
+Open `index.html` in a browser.

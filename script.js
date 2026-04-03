@@ -50,8 +50,8 @@ function switchSigns(num) {
     };
 }
 
-//If there is a num2 it will get the number from that if not then num1. 
-// Returns to either displayVal1 or displayVal2 depending on if there is an operator
+// Apply percent or sign switch to the active value.
+// If an operator exists, modifiers apply to displayVal2; otherwise displayVal1.
 function modify(num1, modifier, num2, isOperator) {
     switch (modifier) {
         case "%":
@@ -60,8 +60,8 @@ function modify(num1, modifier, num2, isOperator) {
             }
             return toPercent(num1);
         case "+/-":
-            // If there is no operator (just 1 number) it returns the negative of num1
-            // If there is an operator it returns negative of num2 which if num2 is null returns -0
+            // No operator -> toggle displayVal1.
+            // Operator present -> toggle displayVal2 (null/empty becomes -0).
             
             if (!isOperator) {
                 return switchSigns(num1)
@@ -75,21 +75,12 @@ function modify(num1, modifier, num2, isOperator) {
 
 };
 
-/* Key Press Options:
-If key is number, and an operator pressed, it clears the screen and puts the new number on the screen, 
-storing the previous two values the number and the operator and waiting for another number, = 
-or an operator to be hit
-If the key is a number and the current value is a number, the number is added to the previous number
-
-If the key is an operator like +, -, /, *, it will store the operation 
-If a special operation like CE, +/-, or % is hit, it will immediatly do its thing; clearing the screen,
-changing positive/negative symbol, or changing to a percent by diving 100.
-If an operator is hit but there is already an operator stored (an operator was hit previously 
-and it has not been cleared or equaled yet), it will do the operation then store the result as 
-displayVal 1
-If = is hit it performs the operation if there is one and stores the result as displayVal2
-
-There are two numbers stored divided by the operator (+, -, /, *)
+/*
+Input flow summary:
+- Number key -> appends to the active display value.
+- Operator key -> stores operator; if one already exists, resolves pending math first.
+- Modifier key (+/-, %) -> applies immediately to the active display value.
+- Equals key -> resolves current operation and keeps result in displayVal1.
 */
 const keypad = document.querySelector("#keypad-container");
 let displayVal1 = "0";
@@ -109,10 +100,10 @@ keypad.addEventListener("click", (event) => {
     
     if (target.classList.contains("num-btn")) {
         if (!operator) {
-            // 0 is replaced with the new number
+            // Replace 0 with first entered digit.
             console.log(typeof(displayVal1))
-            //Uses String() to ensure it is equal to the string 0 even if the 0 was changed in some way
-            //It must be tested equality to a string so -0 doesn't show up as equal
+            // Use String() so values that started as numbers still compare cleanly to "0".
+            // Keep "-0" separate so we do not treat it like "0".
             if (target.textContent === ".") {
                 if (!displayVal1.includes(".")) {
                     displayVal1 += "."
@@ -124,13 +115,13 @@ keypad.addEventListener("click", (event) => {
                 displayVal1 = target.textContent;
             }
             
-            // If -0 replaces the 0 but keeps the -
+            // If value is -0, keep the sign and replace only the digit.
             else if (displayVal1 === "-0") {
                 console.log("-0 ===")
                 displayVal1 = `-${target.textContent}`
                 console.log(displayVal1+" -0")
             }
-            // Else it just adds the new number
+            // Otherwise append the new digit.
             else {
                 displayVal1 += target.textContent;
             }
@@ -160,8 +151,8 @@ keypad.addEventListener("click", (event) => {
         };
 
     }
-    //It returns to either num1 or num2 depending on the if there is an operator or not
-    //If a 5 then + is entered then % it will make num2 .05 and when equaled be 5.05
+    // Modifier actions target displayVal1 or displayVal2 based on operator state.
+    // Example: 5 + % sets displayVal2 to .05, so equals becomes 5.05.
     else if (target.classList.contains("modifier")) {
         modifier = target.textContent;
         if (operator) {
@@ -174,8 +165,8 @@ keypad.addEventListener("click", (event) => {
             output.textContent = result
         }
     }
-    //If there is already an operator it does that operation first before adding the new one
-    //So if 5 + 5 + is entered it will become 10 + as 10 becomes displayVal1
+    // If an operator is already pending, resolve it before storing the next operator.
+    // Example: 5 + 5 + becomes 10 + with 10 saved as displayVal1.
     else if (target.classList.contains("operator")) {     
         if(operator) {
             if (displayVal2) {
